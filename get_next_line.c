@@ -18,10 +18,10 @@ void    cleanup_list(t_list **list)
     int i;
     int k;
     t_list *last_node;
-    t_list *clean_list;
+    t_list *clean_node;
 
     buff = malloc(BUFFER_SIZE + 1);
-    clean_node (sizeof(t_list));
+    clean_node = malloc(sizeof(t_list));
     if (!clean_node || !buff)
         return ;
     last_node = find_last_node(*list);
@@ -38,6 +38,7 @@ void    cleanup_list(t_list **list)
     buff[k] = '\0';
     clean_node -> buffer = buff;
     clean_node -> next = NULL;
+    dallocate(list, clean_node, buff);
 }
 
 char *get_line(t_list *list)
@@ -58,12 +59,12 @@ void    linker(t_list *list, char *buff)
     t_list *new_node;
     t_list *last_node;
 
-    last_node = find_last_node(*list);
+    last_node = find_last_node(list);
     new_node = malloc(sizeof(t_list));
     if (!new_node)
         return ;
     if (!last_node)
-        *list = new_node;
+        list = new_node;
     else
         last_node -> next = new_node;
     new_node -> buffer = buff;
@@ -87,7 +88,7 @@ void    creat_list(t_list **list, int fd)
             return ;
         }
         buff[chars] = '\0';
-        linker(list, buff);
+        linker(*list, buff);
     }
 }
 
@@ -96,7 +97,7 @@ char    *get_next_line(int fd)
     static t_list *list = NULL;
     char *line;
 
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, str, BUFFER_SIZE) < 0)
+    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, BUFFER_SIZE) < 0)
         return (NULL);
     creat_list(&list, fd);
     line = get_line(list);

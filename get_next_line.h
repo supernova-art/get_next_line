@@ -25,7 +25,17 @@ typedef struct s_list {
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 char    *get_next_line(int fd);
+void    linker(t_list *list, char *buff);
+void    creat_list(t_list **list, int fd);
+char    *get_line(t_list *list);
+void    cleanup_list(t_list **list);
+void    copy_line(t_list *list, char *line);
+void    dallocate(t_list **list, t_list *node, char *buff);
+int     len_to_newline(t_list *list);
+t_list  *find_last_node(t_list *list);
+int     found_new_line(t_list *list);
 
 #endif

@@ -36,6 +36,27 @@ void    copy_line(t_list *list, char *line)
     line[k] = '\0';
 }
 
+void dallocate(t_list **list, t_list *clean_node, char *buff)
+{
+    t_list *tmp;
+
+    while(*list)
+    {
+        tmp = (*list)->next;
+        free((*list)->buffer);
+        free(*list);
+        *list = tmp;
+    }
+    *list = NULL;
+    if (clean_node->buffer[0])
+        *list = clean_node;
+    else
+    {
+        free(buff);
+        free(clean_node);
+    }
+}
+
 int     len_to_newline(t_list *list)
 {
     int len;
@@ -52,7 +73,7 @@ int     len_to_newline(t_list *list)
             if(list->buffer[i] == '\n')
             {
                 len++;
-                retrun (len);
+                return (len);
             }
             len++;
             i++;
