@@ -20,7 +20,17 @@ void    append(t_list **list, char *buff)
     t_list *last_node;
 
     last_node = find_last_node(*list);
+    new_node = malloc(sizeof(t_list));
+    if (!new_node)
+        return ;
+    if (last_node == NULL) 
+        *list = new_node;
+    else
+        last_node -> next = new_node;
+    new_node -> buffer = buff;
+    new_node -> next = NULL;
 }
+
 void    creat_list(t_list **list, int fd)
 {
     char *buff;
@@ -49,5 +59,6 @@ char *get_next_line(int fd)
 
     if (fd < 0 || BUFFER_SIZE == 0 || read(fd, next_line, 0)< 0)
         return (NULL);
-
+    creat_list(&list, fd);
+    if (list)
 }
