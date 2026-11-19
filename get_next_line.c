@@ -5,78 +5,49 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yait-elm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/11/17 15:43:31 by yait-elm          #+#    #+#             */
-/*   Updated: 2026/11/18 10:29:17 by yait-elm         ###   ########.fr       */
+/*   Created: 2026/11/18 18:28:08 by yait-elm          #+#    #+#             */
+/*   Updated: 2026/11/18 18:28:13 by yait-elm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void    cleanup_list(t_list **list)
+char    *get_line(t_list *list)
 {
-    char *buff;
-    int i;
-    int k;
-    t_list *last_node;
-    t_list *clean_node;
-
-    buff = malloc(BUFFER_SIZE + 1);
-    clean_node = malloc(sizeof(t_list));
-    if (!clean_node || !buff)
-        return ;
-    last_node = find_last_node(*list);
-    i = 0;
-    k = 0;
-    while (last_node->buffer[i])
-    {
-        if (last_node->buffer[i] == '\n')
-            break;
-        i++;
-    }
-    while(last_node->buffer[i])
-        buff[k++] = last_node->buffer[i++];
-    buff[k] = '\0';
-    clean_node -> buffer = buff;
-    clean_node -> next = NULL;
-    dallocate(list, clean_node, buff);
-}
-
-char *get_line(t_list *list)
-{
-    char *next_line;
+    char *line;
     int len;
 
     len = len_to_newline(list);
-    next_line = malloc(len + 1);
-    if (!next_line)
+    line = malloc(len + 1);
+    if (!line)
         return (NULL);
-    copy_line(list, next_line);
-    return (next_line);
+    copy_content(list, line);
+    return (line);
 }
 
-void    linker(t_list *list, char *buff)
+void    append_node(t_list **list, char *buff)
 {
     t_list *new_node;
     t_list *last_node;
 
-    last_node = find_last_node(list);
+    last_node =  find_last_node(*list);
     new_node = malloc(sizeof(t_list));
     if (!new_node)
         return ;
     if (!last_node)
-        list = new_node;
+        *list = new_node;
     else
         last_node -> next = new_node;
-    new_node -> buffer = buff;
-    new_node -> next = NULL;
+    new_node->content = buff;
+    new_node->next = NULL;
 }
 
-void    creat_list(t_list **list, int fd)
+void    read_and_stash(t_list **list, int fd)
 {
     char *buff;
     int chars;
 
-    while (!found_new_line(*list))
+    while (!found_newline(*list))
     {
         buff = malloc(BUFFER_SIZE + 1);
         if (!buff)
@@ -88,19 +59,20 @@ void    creat_list(t_list **list, int fd)
             return ;
         }
         buff[chars] = '\0';
-        linker(*list, buff);
+        append_node(list, buff);
     }
 }
 
 char    *get_next_line(int fd)
 {
-    static t_list *list = NULL;
-    char *line;
+    static t_list *list;
+    char *next_line;
 
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, BUFFER_SIZE) < 0)
+    if (fd < 0 || BUFFER_SIZE <= 0)//to improve
         return (NULL);
-    creat_list(&list, fd);
-    line = get_line(list);
-    cleanup_list(&list);
-    return (line);
+    read_and_stash(&list, fd);
+    if (!list)
+        return (NULL);
+    next_line = get_line(list);
+    return (next_line);
 }
