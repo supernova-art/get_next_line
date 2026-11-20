@@ -35,7 +35,7 @@ int     len_to_newline(t_list *list)
             if (list->content[i] == '\n')
             {
                 count++;
-                break;
+                return (count);
             }
             count++;
             i++;
@@ -59,7 +59,8 @@ void    copy_content(t_list *list, char *line)
             if (list->content[i] == '\n')
             {
                 line[k++] = '\n';
-                break;
+                line[k] = '\0';
+                return ;
             }
             line[k++] = list->content[i++];
         }
@@ -84,4 +85,25 @@ int     found_newline(t_list *list)
         list = list -> next;
     }
     return (0);
+}
+
+void    free_all(t_list **list, t_list *clean_node, char *buff)
+{
+    t_list *tmp;
+
+    while (*list)
+    {
+        tmp = (*list)->next;
+        free((*list)->content);
+        free(*list);
+        *list = tmp;
+    }
+    *list = NULL;
+    if (clean_node->content[0])
+        *list = clean_node;
+    else
+    {
+        free(buff);
+        free(clean_node);
+    }
 }

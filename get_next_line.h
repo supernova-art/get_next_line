@@ -35,6 +35,7 @@ t_list  *find_last_node(t_list *list);
 int     len_to_newline(t_list *list);
 void    copy_content(t_list *list, char *line);
 int     found_newline(t_list *list);
-
+void    free_all(t_list **list, t_list *clean_node, char *buff);
+void    polish_list(t_list **list);
 
 #endif

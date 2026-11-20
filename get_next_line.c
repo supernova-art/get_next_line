@@ -12,6 +12,32 @@
 
 #include "get_next_line.h"
 
+void    polish_list(t_list **list)
+{
+    t_list *last_node;
+    t_list *clean_node;
+    int i;
+    int j;
+    char *buff;
+
+    i = 0;
+    j = 0;
+    buff = malloc(BUFFER_SIZE + 1);
+    clean_node = malloc(sizeof(t_list));
+    if (!buff || !clean_node)
+        return ;// to inquire abt
+    last_node = find_last_node(*list);
+    while (last_node->content[i] && last_node->content[i] != '\n')
+        i++;
+    while (last_node->content[i])
+        buff[j++] = last_node->content[i++];
+    buff[j] = '\0';
+    clean_node->content = buff;
+    clean_node->next = NULL;
+    /*all the previous nodes must be freed*/
+    free_all(list, clean_node, buff);
+}
+
 char    *get_line(t_list *list)
 {
     char *line;
@@ -74,5 +100,6 @@ char    *get_next_line(int fd)
     if (!list)
         return (NULL);
     next_line = get_line(list);
+    polish_list(&list);
     return (next_line);
 }
