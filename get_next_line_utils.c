@@ -12,6 +12,7 @@
 
 #include "get_next_line.h"
 
+//to find the last node in the list
 t_list *find_last_node(t_list *list)
 {
     if (!list)
@@ -21,6 +22,7 @@ t_list *find_last_node(t_list *list)
     return (list);
 }
 
+//to calculate the len of the leftover
 int     len_to_newline(t_list *list)
 {
     int count;
@@ -45,6 +47,7 @@ int     len_to_newline(t_list *list)
     return (count);
 }
 
+//to copy the line from the list
 void    copy_content(t_list *list, char *line)
 {
     int i;
@@ -69,6 +72,7 @@ void    copy_content(t_list *list, char *line)
     line[k] = '\0';
 }
 
+//fct that checks whether a newline exist or not
 int     found_newline(t_list *list)
 {
     int     i;
@@ -87,6 +91,7 @@ int     found_newline(t_list *list)
     return (0);
 }
 
+//fct that free all the list and avoid our program to have some memory leak issues
 void    free_all(t_list **list, t_list *clean_node, char *buff)
 {
     t_list *tmp;

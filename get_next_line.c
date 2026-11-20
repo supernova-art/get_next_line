@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+//to  clean the list for the next call
 void    polish_list(t_list **list)
 {
     t_list *last_node;
@@ -38,6 +38,7 @@ void    polish_list(t_list **list)
     free_all(list, clean_node, buff);
 }
 
+//to get the line from the list (up to \n)
 char    *get_line(t_list *list)
 {
     char *line;
@@ -51,6 +52,7 @@ char    *get_line(t_list *list)
     return (line);
 }
 
+//to append the buff to the node
 void    append_node(t_list **list, char *buff)
 {
     t_list *new_node;
@@ -68,6 +70,7 @@ void    append_node(t_list **list, char *buff)
     new_node->next = NULL;
 }
 
+//to read the file into a buff in order to append it to a list 
 void    read_and_stash(t_list **list, int fd)
 {
     char *buff;
@@ -89,6 +92,7 @@ void    read_and_stash(t_list **list, int fd)
     }
 }
 
+//mother function
 char    *get_next_line(int fd)
 {
     static t_list *list;
