@@ -8,12 +8,12 @@ int main(void)
     char *line; 
     int fd = open("text.t", O_RDWR | O_CREAT);
     if (fd < 0)
-        return (-1);
-    line = get_next_line(fd);
-    while (line)
+        return (1);
+    while ((line = get_next_line(fd)))
     {  
         printf("%s", line);
-        line = get_next_line(fd);
+        free(line);
     }
-    free(line);
+    close(fd);
+    return 0;
 }

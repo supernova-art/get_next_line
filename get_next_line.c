@@ -29,8 +29,8 @@ void    polish_list(t_list **list)
     last_node = find_last_node(*list);
     while (last_node->content[i] && last_node->content[i] != '\n')
         i++;
-    while (last_node->content[i])
-        buff[j++] = last_node->content[i++];
+    while (last_node->content[i] && last_node->content[++i])
+        buff[j++] = last_node->content[i];
     buff[j] = '\0';
     clean_node->content = buff;
     clean_node->next = NULL;
@@ -79,7 +79,7 @@ void    read_and_stash(t_list **list, int fd)
         if (!buff)
             return ;
         chars = read(fd, buff, BUFFER_SIZE);
-        if (!chars)
+        if (chars <= 0)
         {
             free(buff);
             return ;

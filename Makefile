@@ -14,7 +14,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
-%.o : %.c get_next_line.h
+%.o : %.c ft_printf.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
